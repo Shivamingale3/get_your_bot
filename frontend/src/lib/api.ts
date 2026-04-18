@@ -49,7 +49,7 @@ export const apiClient = {
     list: (token: string) =>
       api<{ bots: Bot[] }>('/bots', { token }),
     create: (token: string, data: CreateBotData) =>
-      api<{ bot: Bot }>('/bots', {
+      api<Bot>('/bots', {
         method: 'POST',
         token,
         body: JSON.stringify(data),

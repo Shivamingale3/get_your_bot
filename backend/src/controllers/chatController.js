@@ -1,5 +1,5 @@
 const prisma = require('../config/prisma');
-const { chat } = require('../services/aiService');
+const { getAIResponse } = require('../services/aiService');
 const { buildPrompt } = require('../services/promptBuilder');
 
 async function chat(req, res) {
@@ -28,7 +28,7 @@ async function chat(req, res) {
 
     const prompt = buildPrompt(bot.contexts, bot.documents, message);
 
-    const response = await chat(bot.provider, bot.apiKeyEncrypted, prompt);
+    const response = await getAIResponse(bot.provider, bot.apiKeyEncrypted, prompt);
 
     await prisma.chatLog.create({
       data: { botId, question: message, response },
@@ -36,7 +36,7 @@ async function chat(req, res) {
 
     res.json({ response });
   } catch (error) {
-    console.error('Chat error:', error);
+    console.error('Chat error:', error.message);
     res.status(500).json({ error: 'Chat failed' });
   }
 }

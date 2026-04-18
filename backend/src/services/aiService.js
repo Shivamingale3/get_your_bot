@@ -17,14 +17,14 @@ async function chatWithOpenAI(apiKey, prompt) {
 
 async function chatWithGemini(apiKey, prompt) {
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
   const result = await model.generateContent(prompt);
   const response = await result.response;
   return response.text();
 }
 
-async function chat(provider, apiKeyEncrypted, prompt) {
+async function getAIResponse(provider, apiKeyEncrypted, prompt) {
   const apiKey = decrypt(apiKeyEncrypted);
 
   if (provider === 'gemini') {
@@ -34,4 +34,4 @@ async function chat(provider, apiKeyEncrypted, prompt) {
   return chatWithOpenAI(apiKey, prompt);
 }
 
-module.exports = { chat, chatWithOpenAI, chatWithGemini };
+module.exports = { getAIResponse, chatWithOpenAI, chatWithGemini };
