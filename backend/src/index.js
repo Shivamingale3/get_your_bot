@@ -5,6 +5,7 @@ const authRoutes = require('./routes/auth');
 const botRoutes = require('./routes/bots');
 const contextRoutes = require('./routes/context');
 const chatRoutes = require('./routes/chat');
+const documentRoutes = require('./routes/documents');
 const authMiddleware = require('./middleware/auth');
 
 const app = express();
@@ -20,6 +21,7 @@ app.use('/auth', authRoutes);
 app.use('/bots', botRoutes);
 app.use('/context', contextRoutes);
 app.use('/chat', chatRoutes);
+app.use('/documents', documentRoutes);
 
 app.get('/me', authMiddleware, (req, res) => {
   res.json({ user: req.user });
