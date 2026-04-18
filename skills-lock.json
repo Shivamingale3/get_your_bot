@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "skills": {
+    "env-var-manager": {
+      "source": "WebDev70/hosting-google",
+      "sourceType": "github",
+      "computedHash": "cd57df0c684d96af3558f60bc81f2ea47ad3b8907112b3f8360870a777a1cfed"
+    },
+    "express-nodejs-expert": {
+      "source": "WebDev70/hosting-google",
+      "sourceType": "github",
+      "computedHash": "c534c9f0da81cea64eeb995657754f56a6e2c0216070b5487cf29dae9af8a260"
+    },
+    "frontend-api-integration": {
+      "source": "WebDev70/hosting-google",
+      "sourceType": "github",
+      "computedHash": "c5f6bd29a316353a70611b7b7356db1f9c396a9386e0ac7831aea7337f2e9d1c"
+    },
+    "nextjs-expert": {
+      "source": "RightNow-AI/openfang",
+      "sourceType": "github",
+      "computedHash": "780f833dc3ef8fabb4982abaa232132b297709d2940e935a31c2d289c0a90229"
+    },
+    "prisma-expert": {
+      "source": "YuniorGlez/gemini-elite-core",
+      "sourceType": "github",
+      "computedHash": "65f07e59451e47448dc8f14fd8dc9dc8f3c25eb48576accddd847e7fcac83665"
+    },
+    "typescript": {
+      "source": "lobehub/lobehub",
+      "sourceType": "github",
+      "computedHash": "88d247797eef607f1ecf542fb8175a81118fbb7a88a1e5dc23f7a1101f245a3f"
+    },
+    "ui-ux-pro": {
+      "source": "YuniorGlez/gemini-elite-core",
+      "sourceType": "github",
+      "computedHash": "485a83942fc146a15f013b9ff94b3585c3186c1f21f26f3ffe933a5494c4f81b"
+    },
+    "ui-ux-specialist": {
+      "source": "YuniorGlez/gemini-elite-core",
+      "sourceType": "github",
+      "computedHash": "ae858ccb65629b4c56d97152cbf7239b6a73795a02297f798184bea7116bf277"
+    }
+  }
+}

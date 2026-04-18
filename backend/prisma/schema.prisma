@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  bots         Bot[]
+
+  @@map("users")
+}
+
+model Bot {
+  id               String     @id @default(uuid())
+  userId           String     @map("user_id")
+  name             String
+  welcomeMessage   String     @default("Hi! How can I help you?") @map("welcome_message")
+  themeColor       String     @default("#6366f1") @map("theme_color")
+  provider         String     @default("openai") // openai | gemini
+  apiKeyEncrypted  String     @map("api_key_encrypted")
+  createdAt        DateTime   @default(now()) @map("created_at")
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contexts         Context[]
+  documents        Document[]
+  chatLogs         ChatLog[]
+
+  @@map("bots")
+}
+
+model Context {
+  id        String   @id @default(uuid())
+  botId     String   @map("bot_id")
+  type      String   // text | faq
+  content   String   // JSON string for FAQ, plain text for text
+  createdAt DateTime @default(now()) @map("created_at")
+  bot       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@map("contexts")
+}
+
+model Document {
+  id            String   @id @default(uuid())
+  botId         String   @map("bot_id")
+  fileUrl       String   @map("file_url")
+  extractedText String   @map("extracted_text")
+  summary       String
+  createdAt     DateTime @default(now()) @map("created_at")
+  bot           Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
+
+model ChatLog {
+  id        String   @id @default(uuid())
+  botId     String   @map("bot_id")
+  question  String
+  response  String
+  createdAt DateTime @default(now()) @map("created_at")
+  bot       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@map("chat_logs")
+}
