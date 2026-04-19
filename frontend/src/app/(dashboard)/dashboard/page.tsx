@@ -24,21 +24,23 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (token) {
-      loadBots();
-    }
-  }, [token]);
+    if (!token) return;
+    let cancelled = false;
 
-  const loadBots = async () => {
-    try {
-      const { bots } = await apiClient.bots.list(token!);
-      setBots(bots);
-    } catch (err) {
-      console.error('Failed to load bots:', err);
-    } finally {
-      setLoading(false);
+    async function fetchBots() {
+      try {
+        const { bots } = await apiClient.bots.list(token!);
+        if (!cancelled) setBots(bots);
+      } catch (err) {
+        if (!cancelled) console.error('Failed to load bots:', err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     }
-  };
+
+    fetchBots();
+    return () => { cancelled = true; };
+  }, [token]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
