@@ -1,10 +1,7 @@
-'use client';
-
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/contexts/AuthContext";
-import BackendLoader from "@/components/BackendLoader";
+import Providers from "./providers";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -34,11 +31,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <body>
-        <BackendLoader>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </BackendLoader>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
