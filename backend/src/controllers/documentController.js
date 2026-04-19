@@ -44,7 +44,14 @@ async function uploadDocument(req, res) {
     const extractedText = await extractTextFromPDF(req.file.buffer);
     const truncatedText = truncateText(extractedText);
 
-    const summary = await summarizeDocument(truncatedText, bot.provider, bot.apiKeyEncrypted);
+    let summary = '';
+    try {
+      summary = await summarizeDocument(truncatedText, bot.provider, bot.apiKeyEncrypted);
+    } catch (aiError) {
+      console.error('AI summarization failed:', aiError.message);
+      // Fallback: use the extracted text as the summary
+      summary = truncatedText.substring(0, 500);
+    }
 
     const document = await prisma.document.create({
       data: {
@@ -57,8 +64,8 @@ async function uploadDocument(req, res) {
 
     res.status(201).json({ document });
   } catch (error) {
-    console.error('Upload document error:', error);
-    res.status(500).json({ error: 'Failed to upload document' });
+    console.error('Upload document error:', error.message, error.stack);
+    res.status(500).json({ error: 'Failed to upload document', details: error.message });
   }
 }
 

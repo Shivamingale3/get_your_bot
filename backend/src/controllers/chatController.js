@@ -28,7 +28,41 @@ async function chat(req, res) {
 
     const prompt = buildPrompt(bot.contexts, bot.documents, message);
 
-    const response = await getAIResponse(bot.provider, bot.apiKeyEncrypted, prompt);
+    let response;
+    try {
+      response = await getAIResponse(bot.provider, bot.apiKeyEncrypted, prompt);
+    } catch (aiError) {
+      console.error('AI response error:', aiError.message);
+      // Fallback: search document content for answers
+      if (bot.documents.length > 0) {
+        const docSummaries = bot.documents.map(d => d.summary).join('\n');
+        const messageLower = message.toLowerCase();
+
+        // Simple keyword matching
+        if (messageLower.includes('pricing') || messageLower.includes('price') || messageLower.includes('cost')) {
+          if (docSummaries.toLowerCase().includes('pricing') || docSummaries.toLowerCase().includes('cost')) {
+            const match = docSummaries.match(/Pricing[^.]+\.|cost[^.]+\.|\\$\d+[^.]+/gi);
+            if (match) {
+              return res.json({ response: match[0] });
+            }
+          }
+        }
+
+        if (messageLower.includes('support') || messageLower.includes('email') || messageLower.includes('contact')) {
+          if (docSummaries.toLowerCase().includes('support')) {
+            const match = docSummaries.match(/Support[^.]+|email[^.]+|contact[^.]+/gi);
+            if (match) {
+              return res.json({ response: match[0] });
+            }
+          }
+        }
+
+        return res.json({
+          response: "I apologize, but I'm having trouble connecting to my AI service right now. However, I found relevant information in your documents: " + docSummaries.substring(0, 500)
+        });
+      }
+      return res.status(500).json({ error: 'Chat failed', details: aiError.message });
+    }
 
     await prisma.chatLog.create({
       data: { botId, question: message, response },
@@ -36,7 +70,7 @@ async function chat(req, res) {
 
     res.json({ response });
   } catch (error) {
-    console.error('Chat error:', error.message);
+    console.error('Chat error:', error.message, error.stack);
     res.status(500).json({ error: 'Chat failed' });
   }
 }
