@@ -1,13 +1,47 @@
 {
-  "experimentalServices": {
-    "frontend": {
-      "entrypoint": "frontend",
-      "routePrefix": "/",
-      "framework": "nextjs"
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/src/index.js",
+      "use": "@vercel/node"
     },
-    "backend": {
-      "entrypoint": "backend",
-      "routePrefix": "/_/backend"
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/next"
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/health",
+      "dest": "backend/src/index.js"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "backend/src/index.js"
+    },
+    {
+      "src": "/bots/(.*)",
+      "dest": "backend/src/index.js"
+    },
+    {
+      "src": "/context/(.*)",
+      "dest": "backend/src/index.js"
+    },
+    {
+      "src": "/chat/(.*)",
+      "dest": "backend/src/index.js"
+    },
+    {
+      "src": "/documents/(.*)",
+      "dest": "backend/src/index.js"
+    },
+    {
+      "src": "/me",
+      "dest": "backend/src/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/$1"
+    }
+  ]
 }
